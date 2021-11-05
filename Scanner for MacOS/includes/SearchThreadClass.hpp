@@ -12,14 +12,12 @@
 
 namespace fs = std::__fs::filesystem;
 
+class Scanner;
+
 class SearchThread
 {
 
 private:
-
-
-
-public:
 	std::string _type;
 	std::set<std::string> _extensions;
 	std::vector<std::string> _toFind;
@@ -29,9 +27,6 @@ public:
 	std::atomic<int> *_errors;
 	std::atomic<int> *_processedFiles;
 
-	SearchThread(std::string type, std::set<std::string> extensions, std::vector<std::string> toFind) :
-				_type(type), _extensions(extensions), _toFind(toFind) {};
-	int getSuspicious() {return _suspicious;}
 	void searchRoutine()
 	{
 		for (auto current : _files)
@@ -59,6 +54,16 @@ public:
 						++_suspicious;
 		}
 	}
+
+public:
+
+	SearchThread(std::string type, std::set<std::string> extensions, std::vector<std::string> toFind) :
+				_type(type), _extensions(extensions), _toFind(toFind) {};
+	int getSuspicious() {return _suspicious;}
+
+	friend Scanner;
+	// friend Scanner::Scanner(std::string path);
+	// friend void Scanner::init();
 };
 
 #endif
